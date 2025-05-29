@@ -1,0 +1,44 @@
+名字: ApkSignatureKiller CI
+
+在:
+推:
+分支: [主要的]
+拉取请求:
+分支: [主要的]
+
+工作:
+建设:
+连续运行: Ubuntu-最新版
+
+步伐:
+    - 使用: 动作/签出@v3
+
+    - 名字: 建立JDK 17号
+使用: 操作/设置-java@v3
+随着:
+java版本: '17'
+分布: '收养'
+
+    - 名字: 编译Java源代码
+奔跑: |
+mkdir -p构建/类
+javac-CP" libs/* "-d构建/类$(查找src-名称"*。java”)
+
+    - 名字: 构建JAR
+奔跑: |
+jar cvf nkstool.jar -C构建/类。
+cp libs/*。jar nkstool_libs.jar
+jar uf NK stool . jar-C $(dirname NK stool _ libs . jar)。
+
+    - 名字: 签署工具(可选)
+奔跑: |
+keytool-genkey pair-alias mykey-keyalg RSA-validity 365-keystore nkstool . keystore
+jarsigner-verbose-sigalg sha1 with RSA-digestalg SHA1-keystore nkstool . keystore nkstool . jar mykey
+
+    - 名字: 存档工件
+使用: 动作/上传-工件@v3
+随着:
+名字: nkstool-已编译
+小路: |
+nkstool.jar
+*.密钥库
